@@ -1,0 +1,92 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="~/wwwroot/css/materialize.min.css" />
+    <link rel="stylesheet" href="~/wwwroot/css/custom.css" />
+</head>
+<body>
+    <div class="preloader-wrapper big active">
+        <div class="spinner-layer spinner-blue">
+            <div class="circle-clipper left">
+                <div class="circle"></div>
+            </div><div class="gap-patch">
+                <div class="circle"></div>
+            </div><div class="circle-clipper right">
+                <div class="circle"></div>
+            </div>
+        </div>
+
+        <div class="spinner-layer spinner-red">
+            <div class="circle-clipper left">
+                <div class="circle"></div>
+            </div><div class="gap-patch">
+                <div class="circle"></div>
+            </div><div class="circle-clipper right">
+                <div class="circle"></div>
+            </div>
+        </div>
+
+        <div class="spinner-layer spinner-yellow">
+            <div class="circle-clipper left">
+                <div class="circle"></div>
+            </div><div class="gap-patch">
+                <div class="circle"></div>
+            </div><div class="circle-clipper right">
+                <div class="circle"></div>
+            </div>
+        </div>
+
+        <div class="spinner-layer spinner-green">
+            <div class="circle-clipper left">
+                <div class="circle"></div>
+            </div><div class="gap-patch">
+                <div class="circle"></div>
+            </div><div class="circle-clipper right">
+                <div class="circle"></div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        @*<div>Role: @ViewBag.Role</div>
+            <div>User: @ViewBag.User</div>*@
+
+        <nav>
+            <div class="nav-wrapper">
+                <a href="#!" class="brand-logo">Logo</a>
+                <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                <ul class="right hide-on-med-and-down">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#signup">Signup</a></li>
+                    <li><a href="#signin">Signin</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <ul class="sidenav" id="mobile-demo">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#signup">Signup</a></li>
+            <li><a href="#signin">Signin</a></li>
+        </ul>
+
+        <section id="home" class="active" src='@Url.Content("~/wwwroot/pages/home.htm")'></section>
+        <section id="signup" src='@Url.Content("~/wwwroot/pages/signup.htm")'></section>
+        <section id="signin" src='@Url.Content("~/wwwroot/pages/signin.htm")'></section>
+    </div>
+    <script src="~/wwwroot/js/jquery-3.3.1.min.js"></script>
+    <script src="~/wwwroot/js/jquery-hashchange.js"></script>
+    <script src="~/wwwroot/js/hogan-3.0.2.min.js"></script>
+    <script src="~/wwwroot/js/materialize.min.js"></script>
+    <script src="~/wwwroot/js/app.js"></script>
+    <script src="~/wwwroot/js/custom.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="d93789c6248b4997be926892d1ebe4de" Name="Diagram1">
+        <EntityTypeShape EntityType="AspNetMvcECommerceModel.Article_details" Width="1.5" PointX="5.25" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="AspNetMvcECommerceModel.Article" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="AspNetMvcECommerceModel.Brand" Width="1.5" PointX="3" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="AspNetMvcECommerceModel.Category" Width="1.5" PointX="0.75" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="AspNetMvcECommerceModel.Color" Width="1.5" PointX="3" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="AspNetMvcECommerceModel.Role" Width="1.5" PointX="5.75" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="AspNetMvcECommerceModel.Size" Width="1.5" PointX="3" PointY="9.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="AspNetMvcECommerceModel.User" Width="1.5" PointX="8" PointY="4.875" IsExpanded="true" />
+        <AssociationConnector Association="AspNetMvcECommerceModel.FK__Article_d__artic__46E78A0C" ManuallyRouted="false" />
+        <AssociationConnector Association="AspNetMvcECommerceModel.FK__Article_d__brand__49C3F6B7" ManuallyRouted="false" />
+        <AssociationConnector Association="AspNetMvcECommerceModel.FK__Article_d__color__47DBAE45" ManuallyRouted="false" />
+        <AssociationConnector Association="AspNetMvcECommerceModel.FK__Article_d__size___48CFD27E" ManuallyRouted="false" />
+        <AssociationConnector Association="AspNetMvcECommerceModel.FK__Articles__catego__3E52440B" ManuallyRouted="false" />
+        <AssociationConnector Association="AspNetMvcECommerceModel.FK__Users__role_id__398D8EEE" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

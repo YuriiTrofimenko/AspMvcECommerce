@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2037
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetMvcECommerce.Domain", "AspNetMvcECommerce.Domain\AspNetMvcECommerce.Domain.csproj", "{2A3F5C6F-BEA4-4B44-87F8-65FD4EB1C352}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspMvcECommerce.WebUi", "AspMvcECommerce.WebUi\AspMvcECommerce.WebUi.csproj", "{F4144003-57EF-43DB-B45D-2B0CEF61E514}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2A3F5C6F-BEA4-4B44-87F8-65FD4EB1C352}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A3F5C6F-BEA4-4B44-87F8-65FD4EB1C352}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A3F5C6F-BEA4-4B44-87F8-65FD4EB1C352}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A3F5C6F-BEA4-4B44-87F8-65FD4EB1C352}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4144003-57EF-43DB-B45D-2B0CEF61E514}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4144003-57EF-43DB-B45D-2B0CEF61E514}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4144003-57EF-43DB-B45D-2B0CEF61E514}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4144003-57EF-43DB-B45D-2B0CEF61E514}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F140C87D-D535-44BC-8EF4-5711AB8A319A}
+	EndGlobalSection
+EndGlobal
