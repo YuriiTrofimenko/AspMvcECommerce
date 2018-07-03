@@ -38,6 +38,12 @@ namespace AspNetMvcECommerce.Domain.EntityController
             return mDb.Users.Find(_userId);
         }
 
+        public User FindByLogin(string _login)
+        {
+            //TODO при регистрации не допускать повторения имен пользователей
+            return mDb.Users.Where(u => (u.login == _login)).SingleOrDefault();
+        }
+
         public User Remove(User _user)
         {
             return mDb.Users.Remove(_user);

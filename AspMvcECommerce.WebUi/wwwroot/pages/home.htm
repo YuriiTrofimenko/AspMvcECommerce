@@ -1,11 +1,31 @@
 ﻿<span>Hello Home!</span>
 <script>
-    app.handler(function () {
+    app.handler(function (param) {
 
-        console.log(preloaderHide);
+        //console.log(preloaderHide);
         return function (param) {
 
-            console.log(preloaderHide);
+            //console.log(param);
+            if (param == 'out') {
+
+                $.ajax({
+                    url: "/api/auth?action=signout&login=&password="
+                    , type: 'GET'
+                }).done(function (resp) {
+
+                    if (resp.error != "") {
+
+                        alert("error: " + resp.error);
+                    } else {
+
+                        onSignOut();
+                        window.location = "/#home";
+                    }
+                }).fail(function () {
+
+                    alert("error");
+                });
+            }
             setTimeout(preloaderHide, 500);
         };
     });

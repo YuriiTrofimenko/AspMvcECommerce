@@ -1,4 +1,5 @@
 ﻿using AspMvcECommerce.WebUi.Models;
+using AspMvcECommerce.WebUi.Share;
 using AspNetMvcECommerce.Domain;
 using AspNetMvcECommerce.Domain.EntityController;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 
 namespace AspMvcECommerce.WebUi.Controllers
@@ -51,31 +53,98 @@ namespace AspMvcECommerce.WebUi.Controllers
 
         public ApiResponse Get([FromUri] SignupForm _signupForm)
         {
-            try
+            switch (_signupForm.Action)
             {
-                Role role = mRepository.RoleEC.Find(1);
-                User user = new User()
-                {
-                    login = _signupForm.Login
-                    ,
-                    password = _signupForm.Password
-                    ,
-                    Role = role
-                    ,
-                    role_id = role.id
-                };
-                mRepository.UserEC.Save(user);
-                return new ApiResponse() { data = new List<User>() { user }, error = "" };
-            }
-            catch (Exception ex)
-            {
+                case HttpRequestParams.signup : {
 
-                return new ApiResponse() { data = null, error = ex.Message };
+                        try
+                        {
+                            Role role = mRepository.RoleEC.Find(2);
+                            User user = new User()
+                            {
+                                login = _signupForm.Login
+                                ,
+                                password = _signupForm.Password
+                                ,
+                                Role = role
+                                ,
+                                role_id = role.id
+                            };
+                            mRepository.UserEC.Save(user);
+                            return new ApiResponse() { data = new List<User>() { user }, error = "" };
+                        }
+                        catch (Exception ex)
+                        {
+
+                            return new ApiResponse() { data = null, error = ex.Message };
+                        }
+                }
+                case HttpRequestParams.signin:
+                    {
+                        try
+                        {
+                            User user =
+                                mRepository.UserEC.FindByLogin(_signupForm.Login);
+
+                            if (user != null && _signupForm.Password == user.password)
+                            {
+
+                                HttpContext.Current.Session["username"] = _signupForm.Login;
+                                return new ApiResponse() { data = new List<string>() { user.login }, error = "" };
+                            }
+                            else {
+
+                                return new ApiResponse() { data = null, error = "auth_error" };
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+
+                            return new ApiResponse() { data = null, error = ex.Message };
+                        }
+                    }
+                case HttpRequestParams.signout:
+                    {
+                        try
+                        {
+                            HttpContext.Current.Session["username"] = null;
+                            return new ApiResponse() { data = new List<string>() { "logout" }, error = "" };
+                        }
+                        catch (Exception ex)
+                        {
+
+                            return new ApiResponse() { data = null, error = ex.Message };
+                        }
+                    }
+                default:
+                    return new ApiResponse() { data = null, error = "params_error" };
             }
         }
 
-        // POST api/<controller>
-        public void Post([FromBody]string value)
+        /*public ApiResponse Get([FromUri] string action)
+        {
+            switch (action)
+            {
+                case HttpRequestParams.signout:
+                    {
+                        try
+                        {
+                            HttpContext.Current.Session["username"] = null;
+                            return new ApiResponse() { data = new List<string>() { "logout" }, error = "" };
+                        }
+                        catch (Exception ex)
+                        {
+
+                            return new ApiResponse() { data = null, error = ex.Message };
+                        }
+                    }
+                default:
+                    return new ApiResponse() { data = null, error = "params_error" };
+            }
+        }*/
+
+            // POST api/<controller>
+            public void Post([FromBody]string value)
         {
         }
 

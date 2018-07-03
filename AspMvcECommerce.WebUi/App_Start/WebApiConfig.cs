@@ -5,6 +5,8 @@ namespace AspMvcECommerce.WebUi.App_Start
 {
     public static class WebApiConfig
     {
+        public static string UrlPrefix { get { return "api"; } }
+        public static string UrlPrefixRelative { get { return "~/api"; } }
         public static void Register(HttpConfiguration config)
         {
             // Web API routes
@@ -12,7 +14,7 @@ namespace AspMvcECommerce.WebUi.App_Start
 
             config.Routes.MapHttpRoute(
                 name: "AuthApi",
-                routeTemplate: "api/{controller}/{id}",
+                routeTemplate: WebApiConfig.UrlPrefix + "/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
 

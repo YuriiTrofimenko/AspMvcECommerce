@@ -9,5 +9,6 @@ namespace AspMvcECommerce.WebUi.Models
     {
         public string Login { get; set; }
         public string Password { get; set; }
+        public string Action { get; set; }
     }
 }
