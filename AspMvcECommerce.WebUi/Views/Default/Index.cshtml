@@ -58,7 +58,7 @@
     </div>
     <div class="container">
         @*<div>Role: @ViewBag.Role</div>
-            <div>User: @ViewBag.User</div>*@
+        <div>User: @ViewBag.User</div>*@
 
         <nav>
             <div class="nav-wrapper">
@@ -80,9 +80,11 @@
             <li><a href="#signin">Signin</a></li>
         </ul>
 
-        <section id="home" class="active" src='@Url.Content("~/wwwroot/pages/home.htm")'></section>
-        <section id="signup" src='@Url.Content("~/wwwroot/pages/signup.htm")'></section>
-        <section id="signin" src='@Url.Content("~/wwwroot/pages/signin.htm")'></section>
+        <section id="home" class="active" src='@Url.Content("/api/auth/page?pagename=home&param=no")'></section>
+        <section id="signup" src='@Url.Content("/api/auth/page?pagename=signup&param=no")'></section>
+        <section id="signin" src='@Url.Content("/api/auth/page?pagename=signin&param=no")'></section>
+        <section id="admin" src='@Url.Content("/api/auth/page?pagename=admin&param=no")'></section>
+        <section id="adminunit" src='@Url.Content("/api/auth/page?pagename=adminunit&param=no")'></section>
     </div>
     <script src="~/wwwroot/js/jquery-3.3.1.min.js"></script>
     <script src="~/wwwroot/js/jquery-hashchange.js"></script>

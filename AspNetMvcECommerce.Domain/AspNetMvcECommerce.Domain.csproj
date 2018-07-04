@@ -86,6 +86,7 @@
     <Compile Include="Color.cs">
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityController\AbstractEC.cs" />
     <Compile Include="EntityController\RoleEC.cs" />
     <Compile Include="EntityController\UserEC.cs" />
     <Compile Include="IRepository.cs" />

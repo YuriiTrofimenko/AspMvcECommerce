@@ -76,7 +76,7 @@ namespace AspMvcECommerce.WebUi.Controllers
                         catch (Exception ex)
                         {
 
-                            return new ApiResponse() { data = null, error = ex.Message };
+                            return new ApiResponse() { data = null, error = ex.StackTrace };
                         }
                 }
                 case HttpRequestParams.signin:
@@ -121,6 +121,53 @@ namespace AspMvcECommerce.WebUi.Controllers
             }
         }
 
+        [Route("api/auth/page")]
+        public Object Get([FromUri] NavigationData _navigationData)
+        {
+            if (_navigationData.pagename == "admin" || _navigationData.pagename == "adminunit")
+            {
+                if(HttpContext.Current.Session["username"] != null) {
+
+                    User user =
+                        mRepository.UserEC.FindByLogin(HttpContext.Current.Session["username"].ToString());
+                    if (user.Role.name == "admin")
+                    {
+                        var response = Request.CreateResponse(HttpStatusCode.Moved);
+                        response.Headers.Location =
+                            new Uri(Url.Content("~/wwwroot/pages/" + _navigationData.pagename + ".htm?" + _navigationData.param));
+                        return response;
+                    }
+                    else
+                    {
+                        var response = Request.CreateResponse(HttpStatusCode.Moved);
+                        response.Headers.Location =
+                            new Uri(Url.Content("~/wwwroot/pages/home.htm?" + _navigationData.param));
+                        return response;
+                    }
+                }
+                else
+                {
+                    var response = Request.CreateResponse(HttpStatusCode.Moved);
+                    response.Headers.Location =
+                        new Uri(Url.Content("~/wwwroot/pages/home.htm?" + _navigationData.param));
+                    return response;
+                }
+            }
+            else
+            {
+                var response = Request.CreateResponse(HttpStatusCode.Moved);
+                response.Headers.Location =
+                    new Uri(Url.Content("~/wwwroot/pages/" + _navigationData.pagename + ".htm?" + _navigationData.param));
+                return response;
+            }
+        }
+
+        [Route("api/auth/checkauth")]
+        public Object Get()
+        {
+            return HttpContext.Current.Session["username"];
+        }
+
         /*public ApiResponse Get([FromUri] string action)
         {
             switch (action)
@@ -143,8 +190,8 @@ namespace AspMvcECommerce.WebUi.Controllers
             }
         }*/
 
-            // POST api/<controller>
-            public void Post([FromBody]string value)
+        // POST api/<controller>
+        public void Post([FromBody]string value)
         {
         }
 

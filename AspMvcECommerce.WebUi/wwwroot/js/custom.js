@@ -23,8 +23,20 @@ var onSignOut = function () {
 
     $("a[href='#signin']").css('display', 'block');
     $("a[href='#signup']").css('display', 'block');
+
+    $("section#admin").html('');
 }
 
 $(document).ready(function () {
+
     $('.sidenav').sidenav();
+    $.get("/api/auth/checkauth")
+        .done(function (resp) {
+
+            if (resp != null) {
+
+                onSignIn(resp);
+            }
+        })
+        .fail(function () { alert("Fatal error"); });
 });

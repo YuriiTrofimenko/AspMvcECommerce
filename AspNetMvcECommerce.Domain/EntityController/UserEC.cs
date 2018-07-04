@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace AspNetMvcECommerce.Domain.EntityController
 {
-    public class UserEC
+    public class UserEC : AbstractEC<User>
     {
-        private AspNetMvcECommerceEntities mDb;
-        public UserEC(AspNetMvcECommerceEntities _db) {
-            mDb = _db;
+        //private AspNetMvcECommerceEntities mDb;
+        public UserEC(AspNetMvcECommerceEntities _db) : base(_db) {
+            //mDb = _db;
         }
 
-        public User Save(User _user)
+        /*public User Save(User _user)
         {
             User user = Find(_user.id);
             if (user == null)
@@ -36,7 +36,7 @@ namespace AspNetMvcECommerce.Domain.EntityController
         public User Find(int _userId)
         {
             return mDb.Users.Find(_userId);
-        }
+        }*/
 
         public User FindByLogin(string _login)
         {
@@ -44,9 +44,9 @@ namespace AspNetMvcECommerce.Domain.EntityController
             return mDb.Users.Where(u => (u.login == _login)).SingleOrDefault();
         }
 
-        public User Remove(User _user)
+        /*public User Remove(User _user)
         {
             return mDb.Users.Remove(_user);
-        }
+        }*/
     }
 }

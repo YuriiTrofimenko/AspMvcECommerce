@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace AspNetMvcECommerce.Domain.EntityController
 {
-    public class RoleEC
+    public class RoleEC : AbstractEC<Role>
     {
-        private AspNetMvcECommerceEntities mDb;
-        public RoleEC(AspNetMvcECommerceEntities _db) {
-            mDb = _db;
+        //private AspNetMvcECommerceEntities mDb;
+        public RoleEC(AspNetMvcECommerceEntities _db) : base(_db){
+            //mDb = _db;
         }
 
-        public Role Save(Role _role)
+        /*public Role Save(Role _role)
         {
             Role role = Find(_role.id);
             if (role == null)
@@ -41,6 +41,6 @@ namespace AspNetMvcECommerce.Domain.EntityController
         public Role Remove(Role _role)
         {
             return mDb.Roles.Remove(_role);
-        }
+        }*/
     }
 }
