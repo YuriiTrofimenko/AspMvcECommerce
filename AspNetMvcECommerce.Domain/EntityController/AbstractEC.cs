@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -43,8 +44,16 @@ namespace AspNetMvcECommerce.Domain.EntityController
         public T Find(int _parrentId)
         {
             PropertyInfo temp = mDb.GetType().GetProperty(typeof(T).Name + "s");
-            MethodInfo find = temp.GetType().GetMethod("Find");
-            T result = (T)find.Invoke(Activator.CreateInstance(temp.GetType()), new object[] { _parrentId });
+            Object o = temp.GetValue(mDb, null);
+            MethodInfo find = o.GetType().GetMethod("Find");
+            /*Object o = Activator.CreateInstance(temp.GetType(),
+                    BindingFlags.CreateInstance |
+                     BindingFlags.Public |
+                     BindingFlags.Instance |
+                     BindingFlags.OptionalParamBinding,
+                     null, new Object[] { Type.Missing }, null);*/
+            //Object o = FormatterServices.GetUninitializedObject(temp.GetType());
+            T result = (T)find.Invoke(o, new object[] { new object[] { _parrentId } });
             return result;
 
             /*return mDb.Roles.Find(_parrentId);*/
@@ -53,8 +62,11 @@ namespace AspNetMvcECommerce.Domain.EntityController
         public T Remove(T _parrent)
         {
             PropertyInfo temp = mDb.GetType().GetProperty(typeof(T).Name + "s");
-            MethodInfo remove = temp.GetType().GetMethod("Remove");
-            T result = (T)remove.Invoke(Activator.CreateInstance(temp.GetType()), new object[] { _parrent });
+            Object o = temp.GetValue(mDb, null);
+            MethodInfo remove = o.GetType().GetMethod("Remove");
+            //FormatterServices.GetUninitializedObject(temp.GetType())
+            //Object o = Activator.CreateInstance(temp.GetType());
+            T result = (T)remove.Invoke(o, new object[] { new object[] { _parrent } });
             mDb.SaveChanges();
             return result;
 

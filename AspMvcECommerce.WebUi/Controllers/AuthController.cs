@@ -76,7 +76,7 @@ namespace AspMvcECommerce.WebUi.Controllers
                         catch (Exception ex)
                         {
 
-                            return new ApiResponse() { data = null, error = ex.StackTrace };
+                            return new ApiResponse() { data = null, error = ex.InnerException.Message };
                         }
                 }
                 case HttpRequestParams.signin:
