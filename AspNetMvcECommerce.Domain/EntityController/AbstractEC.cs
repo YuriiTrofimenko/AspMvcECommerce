@@ -33,8 +33,9 @@ namespace AspNetMvcECommerce.Domain.EntityController
             else
             {
                 PropertyInfo temp = mDb.GetType().GetProperty(typeof(T).Name + "s");
-                MethodInfo add = temp.GetType().GetMethod("Add");
-                add.Invoke(Activator.CreateInstance(temp.GetType()), new object[] { _parrent });
+                Object o = temp.GetValue(mDb, null);
+                MethodInfo add = o.GetType().GetMethod("Add");
+                add.Invoke(o, new object[] { _parrent });
             }
             mDb.SaveChanges();
             return _parrent;
