@@ -5,7 +5,7 @@
                 <div class="card-content">
                     <span class="card-title">Sign in</span>
                     <div class="row">
-                        <form class="col s12">
+                        <form id="signin-form" class="col s12">
                             <div class="row">
                                 <div class="input-field col s12">
                                     <input id="login" name="login" type="text" class="validate">
@@ -38,7 +38,8 @@
         return function (param) {
 
             //console.log(preloaderHide);
-            $('form').submit(function (ev) {
+            $('#signin-form').unbind("click");
+            $('#signin-form').submit(function (ev) {
 
                 ev.preventDefault();
                 var formData = $(this).serialize();
@@ -55,7 +56,7 @@
                     } else {
 
                         //alert("Your data is: " + resp.data[0]);
-                        $("form")[0].reset();
+                        $('#signin-form')[0].reset();
                         onSignIn(resp.data[0]);
                         window.location = "/#home";
                         //window.location = "/api/auth?pagename=home&param=no";

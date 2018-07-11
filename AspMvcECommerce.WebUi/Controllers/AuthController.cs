@@ -59,19 +59,29 @@ namespace AspMvcECommerce.WebUi.Controllers
 
                         try
                         {
-                            Role role = mRepository.RoleEC.Find(2);
-                            User user = new User()
+                            string newUserName = _signupForm.Login;
+                            var oldUser =
+                                mRepository.UserEC.FindByLogin(newUserName);
+                            if (oldUser == null)
                             {
-                                login = _signupForm.Login
-                                ,
-                                password = _signupForm.Password
-                                ,
-                                Role = role
-                                ,
-                                role_id = role.id
-                            };
-                            mRepository.UserEC.Save(user);
-                            return new ApiResponse() { data = new List<User>() { user }, error = "" };
+                                Role role = mRepository.RoleEC.Find(2);
+                                User user = new User()
+                                {
+                                    login = _signupForm.Login
+                                    ,
+                                    password = _signupForm.Password
+                                    ,
+                                    Role = role
+                                    ,
+                                    role_id = role.id
+                                };
+                                mRepository.UserEC.Save(user);
+                                return new ApiResponse() { data = new List<User>() { user }, error = "" };
+                            }
+                            else
+                            {
+                                return new ApiResponse() { data = new List<User>() { }, error = $"User {newUserName} already presents" };
+                            }
                         }
                         catch (Exception ex)
                         {
