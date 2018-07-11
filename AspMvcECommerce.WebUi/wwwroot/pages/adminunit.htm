@@ -123,6 +123,18 @@
                         );
                         //Заполняем шаблон данными и помещаем на веб-страницу
                         $('#categories-container').html(template.render(resp));
+
+                        $("#editCategory, #deleteCategory").attr('disabled', '');
+                        //Устанавливаем обработчик кликов на все строки таблицы кроме заголовка
+                        $("#categories-container tr:not(:first)").unbind("click");
+                        $("#categories-container table tr:not(:first)").click(function () {
+
+                            //Разблокируем кнопки, когда выбрана строка таблицы
+                            $("#editCategory, #deleteCategory").removeAttr('disabled');
+                            //Отмечаем текст выбранной строки зеленым цветом, с остальных строк выделение убираем
+                            //(оно могло быть ранее установлено на одну из строк)
+                            $(this).addClass("selectedTableRow").siblings().removeClass("selectedTableRow");
+                        });
                     }
                 }).fail(function () {
 
@@ -157,15 +169,16 @@
                 }
             );
 
-            //console.log(preloaderHide);
-            /*$('form').submit(function (ev) {
+            //
+            $("#deleteCategory").unbind("click");
+            $('#deleteCategory').click(function (ev) {
 
                 ev.preventDefault();
-                var formData = $(this).serialize();
-                //console.log(formData);
-                $.ajax({
-                    url: "/api/auth?action=signin"
-                    , data: formData
+                var catId = $('.selectedTableRow').find('th').text();
+                console.log(catId);
+                /*$.ajax({
+                    url: "api/categories/delete"
+                    , data: { 'catid': catId }
                     , type: 'GET'
                 }).done(function (resp) {
 
@@ -174,16 +187,14 @@
                         alert("error: " + resp.error);
                     } else {
 
-                        //alert("Your data is: " + resp.data[0]);
-                        $("form")[0].reset();
-                        onSignIn(resp.data[0]);
-                        window.location = "/#home";
+                        populateCategoriesTable();
                     }
                 }).fail(function () {
 
                     alert("error");
-                });
-            });*/
+                });*/
+            });
+
             setTimeout(preloaderHide, 500);
         };
     });

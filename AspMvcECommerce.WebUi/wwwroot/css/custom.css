@@ -31,3 +31,7 @@ section.active {
 #categories-edit, #articles-edit {
     display: none;
 }
+
+.selectedTableRow {
+    color: #26a69a;
+}
