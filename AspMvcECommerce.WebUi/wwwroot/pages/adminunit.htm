@@ -195,6 +195,7 @@
 
             populateCategoriesTable();
 
+            $('#categories-edit button[type=submit]').unbind("click");
             $('#categories-edit button[type=submit]').click(
 
                 function (ev) {
@@ -227,7 +228,7 @@
                 ev.preventDefault();
                 var catId = $('.selectedTableRow').find('th').text();
                 console.log(catId);
-                /*$.ajax({
+                $.ajax({
                     url: "api/categories/delete"
                     , data: { 'catid': catId }
                     , type: 'GET'
@@ -243,7 +244,7 @@
                 }).fail(function () {
 
                     alert("error");
-                });*/
+                });
             });
 
             setTimeout(preloaderHide, 500);

@@ -67,7 +67,7 @@ namespace AspNetMvcECommerce.Domain.EntityController
             MethodInfo remove = o.GetType().GetMethod("Remove");
             //FormatterServices.GetUninitializedObject(temp.GetType())
             //Object o = Activator.CreateInstance(temp.GetType());
-            T result = (T)remove.Invoke(o, new object[] { new object[] { _parrent } });
+            T result = (T)remove.Invoke(o, new object[] { _parrent } );
             mDb.SaveChanges();
             return result;
 

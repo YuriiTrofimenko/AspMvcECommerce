@@ -158,6 +158,44 @@ namespace AspMvcECommerce.WebUi.Controllers
             }
         }
 
+        [Route("api/categories/delete")]
+        public Object Get(int catid)
+        {
+            try
+            {
+                if (HttpContext.Current.Session["username"] != null)
+                {
+                    User user =
+                        mRepository.UserEC.FindByLogin(HttpContext.Current.Session["username"].ToString());
+                    if (user.Role.name == "admin")
+                    {
+                        Category category = mRepository.CategoryEC.Find(catid);
+                        mRepository.CategoryEC.Remove(category);
+                        return new ApiResponse() { data = new List<Category>() { category }, error = "" };
+                    }
+                    else
+                    {
+                        var response = Request.CreateResponse(HttpStatusCode.Moved);
+                        response.Headers.Location =
+                            new Uri(Url.Content("~/wwwroot/pages/home.htm"));
+                        return response;
+                    }
+                }
+                else
+                {
+                    var response = Request.CreateResponse(HttpStatusCode.Moved);
+                    response.Headers.Location =
+                        new Uri(Url.Content("~/wwwroot/pages/home.htm"));
+                    return response;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return new ApiResponse() { data = null, error = ex.Message + " : " + ex.StackTrace };
+            }
+        }
+
         /*public ApiResponse Get([FromUri] string action)
         {
             switch (action)
