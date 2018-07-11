@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace AspNetMvcECommerce.Domain.EntityController
@@ -32,7 +33,7 @@ namespace AspNetMvcECommerce.Domain.EntityController
             }
             else
             {
-                PropertyInfo temp = mDb.GetType().GetProperty(typeof(T).Name + "s");
+                PropertyInfo temp = mDb.GetType().GetProperty(propNameCreator(typeof(T).Name));
                 Object o = temp.GetValue(mDb, null);
                 MethodInfo add = o.GetType().GetMethod("Add");
                 add.Invoke(o, new object[] { _parrent });
@@ -41,10 +42,9 @@ namespace AspNetMvcECommerce.Domain.EntityController
             return _parrent;
         }
 
-
         public T Find(int _parrentId)
         {
-            PropertyInfo temp = mDb.GetType().GetProperty(typeof(T).Name + "s");
+            PropertyInfo temp = mDb.GetType().GetProperty(propNameCreator(typeof(T).Name));
             Object o = temp.GetValue(mDb, null);
             MethodInfo find = o.GetType().GetMethod("Find");
             /*Object o = Activator.CreateInstance(temp.GetType(),
@@ -62,7 +62,7 @@ namespace AspNetMvcECommerce.Domain.EntityController
 
         public T Remove(T _parrent)
         {
-            PropertyInfo temp = mDb.GetType().GetProperty(typeof(T).Name + "s");
+            PropertyInfo temp = mDb.GetType().GetProperty(propNameCreator(typeof(T).Name ));
             Object o = temp.GetValue(mDb, null);
             MethodInfo remove = o.GetType().GetMethod("Remove");
             //FormatterServices.GetUninitializedObject(temp.GetType())
@@ -72,6 +72,19 @@ namespace AspNetMvcECommerce.Domain.EntityController
             return result;
 
             /*return mDb.Roles.Remove(_parrent);*/
+        }
+
+        private string propNameCreator(string _name)
+        {
+
+            if (Regex.IsMatch(_name, "[A-z]{1,}[y]$"))
+            {
+                _name = _name.Remove(_name.Length - 1) + "ies";
+            }
+            else {
+                _name = _name + "s";
+            }
+            return _name;
         }
     }
 }

@@ -25,3 +25,9 @@ section {
 section.active {
     display: block;
 }
+
+/* Admin */
+
+#categories-edit, #articles-edit {
+    display: none;
+}

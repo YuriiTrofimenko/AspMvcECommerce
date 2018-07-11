@@ -40,8 +40,20 @@
                     <p>Manage the categories</p>
                 </div>
                 <div class="card-action">
-                    <!--<a href="#adminunit:categories">Go</a>-->
-                    <a href="/api/auth?pagename=adminunit&param=categories">Go</a>
+                    <a href="#adminunit:categories">Go</a>
+                    <!--<a href="/api/auth/page?pagename=adminunit&param=categories">Go</a>-->
+                </div>
+            </div>
+        </div>
+        <div class="col s12 m4 l4 xl4">
+            <div class="card">
+                <div class="card-content">
+                    <span class="card-title">Articles</span>
+                    <p>Manage the articles</p>
+                </div>
+                <div class="card-action">
+                    <a href="#adminunit:articles">Go</a>
+                    <!--<a href="/api/auth/page?pagename=adminunit&param=categories">Go</a>-->
                 </div>
             </div>
         </div>
@@ -53,7 +65,7 @@
         //console.log(preloaderHide);
         return function (param) {
 
-            //console.log(preloaderHide);
+            
             /*$('form').submit(function (ev) {
 
                 ev.preventDefault();

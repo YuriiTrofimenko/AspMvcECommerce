@@ -9,12 +9,6 @@ namespace AspMvcECommerce.WebUi.Controllers
 {
     public class DefaultController : Controller
     {
-        /*private AspNetMvcECommerceEntities mContext;
-
-        public DefaultController() {
-
-            mContext = new AspNetMvcECommerceEntities();
-        }*/
         // GET: Default
         public ActionResult Index()
         {

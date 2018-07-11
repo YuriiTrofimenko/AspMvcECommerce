@@ -1,21 +1,15 @@
-﻿<!--<div class="container">
+﻿<div id="categories-edit" class="container">
     <div class="row">
-        <div class="col s12">
+        <div class="col s3">
             <div class="card grey lighten-2">
                 <div class="card-content">
-                    <span class="card-title">Sign in</span>
+                    <span class="card-title">Category</span>
                     <div class="row">
                         <form class="col s12">
                             <div class="row">
                                 <div class="input-field col s12">
-                                    <input id="login" name="login" type="text" class="validate">
-                                    <label for="login">Login</label>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="input-field col s12">
-                                    <input id="password" name="password" type="text" class="validate">
-                                    <label for="password">Password</label>
+                                    <input id="name" name="name" type="text" class="validate">
+                                    <label for="name">category name</label>
                                 </div>
                             </div>
                             <div class="row">
@@ -29,9 +23,35 @@
                 </div>
             </div>
         </div>
+        <div class="col s12 m9 l9 xl9">
+            <h4>Articles</h4>
+            <!-- Сюда при помощи jquery помещается шаблон таблицы, заполненный данными о категориях -->
+            <div class="row">
+                <div class="col s12 m12 l12 xl12">
+                    <div id="categories-container"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m12 l12 xl12">
+                    <div class="card horizontal">
+                        <div class="card-stacked">
+                            <div class="card-content">
+                                <form>
+                                    <button id="editCategory" class="waves-effect waves-light btn" type="button">Edit</button>
+                                    <button id="deleteCategory" class="waves-effect waves-light btn" type="button">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>-->
-<div class="container">
+</div>
+<div id="articles-edit" class="container">
+    article-edit
+</div>
+<!--<div class="container">
     <div class="row">
         <div class="col s12 m4 l4 xl4">
             <div class="card">
@@ -45,12 +65,97 @@
             </div>
         </div>
     </div>
-</div>
+</div>-->
 <script>
     app.handler(function () {
 
         //console.log(preloaderHide);
         return function (param) {
+
+            console.log(param);
+            switch (param) {
+                case "categories": {
+                    $('#categories-edit').css('display', 'block');
+                    $('#articles-edit').css('display', 'none');
+                    break;
+                }
+                case "articles": {
+                    $('#articles-edit').css('display', 'block');
+                    $('#categories-edit').css('display', 'none');
+                    break;
+                }
+                default:
+            }
+
+            var populateCategoriesTable = function () {
+
+                $.ajax({
+                    url: "/api/categories/get-all"
+                    , type: 'GET'
+                }).done(function (resp) {
+
+                    if (resp.error != "") {
+
+                        alert("error: " + resp.error);
+                    } else {
+
+                        //console.log(resp);
+                        var template = Hogan.compile(
+                            '<table class="table">'
+                                + '<thead>'
+                                    + '<tr>'
+                                        + '<th>ID</th>'
+                                        + '<th>name</th>'
+                                    + '</tr>'
+                                + '</thead>'
+                                + '<tbody>'
+                                    + '{{#data}}'
+                                        + '<tr>'
+                                            + '<th scope="row">{{id}}</th>'
+                                            + '<td>{{name}}</td>'
+                                        + '</tr>'
+                                    + '{{/data}}'
+                                    + '{{^data}}'
+                                        + '<span>Categories list is empty</span>'
+                                    + '{{/data}}'
+                                + '</tbody>'
+                            + '</table>'
+                        );
+                        //Заполняем шаблон данными и помещаем на веб-страницу
+                        $('#categories-container').html(template.render(resp));
+                    }
+                }).fail(function () {
+
+                    alert("error");
+                });
+            }
+
+            populateCategoriesTable();
+
+            $('#categories-edit button[type=submit]').click(
+
+                function (ev) {
+
+                    ev.preventDefault();
+                    $.ajax({
+                        url: "api/categories/add"
+                        , data: { 'catname': $('#categories-edit input#name').val() }
+                        , type: 'GET'
+                    }).done(function (resp) {
+
+                        if (resp.error != "") {
+
+                            alert("error: " + resp.error);
+                        } else {
+
+                            populateCategoriesTable();
+                        }
+                    }).fail(function () {
+
+                        alert("error");
+                    });
+                }
+            );
 
             //console.log(preloaderHide);
             /*$('form').submit(function (ev) {
