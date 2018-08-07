@@ -87,6 +87,7 @@
       <DependentUpon>Model.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityController\AbstractEC.cs" />
+    <Compile Include="EntityController\ArticleEC.cs" />
     <Compile Include="EntityController\CategoryEC.cs" />
     <Compile Include="EntityController\RoleEC.cs" />
     <Compile Include="EntityController\UserEC.cs" />

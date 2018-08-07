@@ -9,6 +9,7 @@
 
 namespace AspNetMvcECommerce.Domain
 {
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     
@@ -22,7 +23,8 @@ namespace AspNetMvcECommerce.Domain
     
         public int id { get; set; }
         public string name { get; set; }
-    
+
+        [JsonIgnore]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Article> Articles { get; set; }
     }

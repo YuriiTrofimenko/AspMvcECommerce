@@ -13,6 +13,7 @@ namespace AspNetMvcECommerce.Domain
         public UserEC UserEC => new UserEC(mDb);
         public RoleEC RoleEC => new RoleEC(mDb);
         public CategoryEC CategoryEC => new CategoryEC(mDb);
+        public ArticleEC ArticleEC => new ArticleEC(mDb);
 
         public Repository() {
             mDb = new AspNetMvcECommerceEntities();
