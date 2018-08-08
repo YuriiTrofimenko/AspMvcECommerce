@@ -1,4 +1,4 @@
-﻿<div id="categories-edit" class="container">
+﻿<div id="categories-edit">
     <div class="row">
         <div class="col s3">
             <div class="card grey lighten-2">
@@ -48,9 +48,9 @@
         </div>
     </div>
 </div>
-<div id="articles-edit" class="container">
+<div id="articles-edit">
     <div class="row">
-        <div class="col s3">
+        <div class="col s12 m4 l4 xl4">
             <div class="card grey lighten-2">
                 <div class="card-content">
                     <span class="card-title">Article</span>
@@ -78,15 +78,19 @@
                                     <input id="quantity" name="quantity" type="text" class="validate">
                                     <label for="quantity">quantity</label>
                                 </div>
+                                <div class="col s12">
+                                    <div class="file-field input-field">
+                                        <div class="btn">
+                                            <span>Image</span>
+                                            <input id="image-input" type="file">
+                                        </div>
+                                        <div class="file-path-wrapper">
+                                            <input class="file-path validate" type="text">
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="input-field col s12">
-                                    <label for="image-input">Image</label>
-                                    <div class="btn">
-                                        <span><i class="material-icons right">image</i></span>
-                                        <input type="file" id="image-input">
-                                    </div>
-                                    <div class="file-path-wrapper">
-                                        <input class="file-path validate" type="text">
-                                    </div>
+                                    <img id="image" class="responsive-img" src="">
                                 </div>
                             </div>
                             <div class="row">
@@ -100,7 +104,7 @@
                 </div>
             </div>
         </div>
-        <div class="col s12 m9 l9 xl9">
+        <div class="col s12 m8 l8 xl8">
             <h4>Articles</h4>
             <!-- Сюда при помощи jquery помещается шаблон таблицы, заполненный данными о категориях -->
             <div class="row">
@@ -366,25 +370,26 @@
 
                     //Prepare the image
                     var imageBase64 = "";
-                    $('#articles-container form input#image-input').unbind("change");
-                    $('#articles-container form input#image-input').change(function (ev) {
+                    //console.log($('#articles-edit form input#image-input'));
 
-                        //console.log($('form#create-offer-form input#image-input'));
+                    $('#articles-edit form input#image-input').unbind("change");
+                    $('#articles-edit form input#image-input').change(function (ev) {
+
                         var file = ev.target.files[0];
 
-                        /*ImageTools.resize(file, {
+                        ImageTools.resize(file, {
                             width: 300, // maximum width
                             height: 300 // maximum height
                         }, function (blob, didItResize) {
-                            // didItResize will be true if it managed to resize it, otherwise false (and will return the original file as 'blob')
-                            //document.getElementById('preview').src = window.URL.createObjectURL(blob);
                             var reader = new FileReader();
                             reader.onloadend = function () {
 
                                 imageBase64 = reader.result;
+                                console.log(imageBase64);
+                                $('#articles-edit img#image').attr('src', imageBase64);
                             }
                             reader.readAsDataURL(blob);
-                        });*/
+                        });
                     });
 
                     //New article form submit handler
@@ -396,7 +401,7 @@
                             ev.preventDefault();
 
                             var formData = $('#articles-edit form').serializeArray();
-
+                            //console.log(formData['title']);
                             var selectedCategoryIndex =
                                 $('#articles-edit form #category-select li.selected').index();
                             var selectedCategoryId =
@@ -404,12 +409,19 @@
                                     .eq(selectedCategoryIndex)
                                     .val();
                             formData.push({ name: 'categoryid', value: selectedCategoryId });
+                            formData.push({ name: 'imageBase64', value: imageBase64 });
                             //data.push({ name: 'action', value: 'create' });
+                            
+                            //console.log(formData[0].value);
+                            formData[0].value = encodeURIComponent(formData[0].value);
+                            formData[1].value = encodeURIComponent(formData[1].value);
+                            //console.log(formData[0].value);
+
                             console.log(formData);
                             $.ajax({
                                 url: "api/articles/add"
                                 , data: formData
-                                , type: 'GET'
+                                , type: 'POST'
                             }).done(function (resp) {
 
                                 if (resp.error != "") {

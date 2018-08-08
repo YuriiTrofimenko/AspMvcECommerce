@@ -1,4 +1,181 @@
-﻿<span>Hello Home!</span>
+﻿<div id="articles-grid">
+    <div class="row flex">
+        <div class="col s1 valign-wrapper">
+            <ul id="slide-out" class="sidenav">
+                <li>
+                    <ul class="collapsible">
+                        <li>
+                            <div class="collapsible-header">
+                                <i class="material-icons">list</i>Категории
+                            </div>
+                            <div class="collapsible-body">
+                                <form id="categories" action="#">
+                                    
+                                </form>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header">
+                                <i class="material-icons">filter_list</i>Фильтр
+                            </div>
+                            <div class="collapsible-body">
+                                <form id="filters" action="#">
+                                    <!--<div class="row">
+                                        <div class="col s12">
+                                            <div class="row">
+                                                <div class="input-field col s12">
+                                                    <i class="material-icons prefix">place</i>
+                                                    <input type="text" id="country-input" class="autocomplete" autocomplete="off" placeholder="country">
+                                                    <label for="country-input">Страна</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s12">
+                                            <div class="row">
+                                                <div class="input-field col s12">
+                                                    <i class="material-icons prefix">place</i>
+                                                    <input type="text" id="city-input" class="autocomplete" autocomplete="off" placeholder="city">
+                                                    <label for="city-input">Город</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s12">
+                                            <div class="row">
+                                                <div class="input-field col s6">
+                                                    <input type="number" id="c-count-input" min="1" placeholder="&infin;" value="">
+                                                    <label for="c-count-input">Вакантных мест</label>
+                                                </div>
+                                                <div class="input-field col s6">
+                                                    <p>
+                                                        <label>
+                                                            <input id="c-count-on-off" type="checkbox" />
+                                                            <span>On / Off</span>
+                                                        </label>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>-->
+                                </form>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="collapsible-header">
+                                <i class="material-icons">sort</i>Сортировка
+                            </div>
+                            <div class="collapsible-body">
+                                <form id="order-rules" action="#">
+                                    <!--<p>
+                                        <label>
+                                            <input id="sort-created-desc" name="sort-group" type="radio" checked="checked" />
+                                            <span>сначала новые по дате создания</span>
+                                        </label>
+                                    </p>
+                                    <p>
+                                        <label>
+                                            <input id="sort-created-asc" name="sort-group" type="radio" />
+                                            <span>сначала старые по дате создания</span>
+                                        </label>
+                                    </p>
+                                    <p>
+                                        <label>
+                                            <input id="sort-urgency-asc" name="sort-group" type="radio" /> <span>
+                                                от
+                                                краткосрочных к длительным
+                                            </span>
+                                        </label>
+                                    </p>
+                                    <p>
+                                        <label>
+                                            <input id="sort-urgency-desc" name="sort-group" type="radio" /> <span>
+                                                от
+                                                длительных к краткосрочным
+                                            </span>
+                                        </label>
+                                    </p>
+                                    <p>
+                                        <label>
+                                            <input id="sort-start-asc" name="sort-group" type="radio" /> <span>сначала ближайшие по дате старта</span>
+                                        </label>
+                                    </p>
+                                    <p>
+                                        <label>
+                                            <input id="sort-start-desc" name="sort-group" type="radio" /> <span>сначала позднейшие по дате старта</span>
+                                        </label>
+                                    </p>
+                                    <p>
+                                        <label>
+                                            <input id="sort-finish-asc" name="sort-group" type="radio" /> <span>сначала ближайшие по дате окончания</span>
+                                        </label>
+                                    </p>
+                                    <p>
+                                        <label>
+                                            <input id="sort-finish-desc" name="sort-group" type="radio" /> <span>сначала позднейшие по дате окончания</span>
+                                        </label>
+                                    </p>-->
+                                </form>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <a href="#" data-target="slide-out" class="sidenav-trigger">
+                <i class="material-icons" style="pointer-events: none">settings</i>
+            </a>
+        </div>
+        <div class="col s11">
+            <!--<div class="row">
+                <form id="search-form" class="col s12">
+                    <div class="input-field">
+                        <i class="material-icons prefix">search</i>
+                        <input id="search" class="autocomplete" autocomplete="off" type="text" placeholder="поиск по заголовкам" required>
+                    </div>
+                </form>
+            </div>-->
+            <!--<div class="row">
+                <div class="col s6">
+                    <form>
+                        <label for="calendarFrom"> Начиная с: </label>
+                        <input id="calendarFrom" name="calendarFrom" type="text" class="datepicker"> </input>
+                    </form>
+                </div>
+                <div class="col s6">
+                    <form>
+                        <label for="calendarTo"> по: </label>
+                        <input id="calendarTo" name="calendarTo" type="text" class="datepicker"> </input>
+                    </form>
+                </div>
+            </div>-->
+        </div>
+    </div>
+    <!-- Сюда при помощи jquery помещается шаблон grid, заполненный данными offers -->
+    <div class="row">
+        <div class="col s12 m12 l12 xl12">
+            <div id="article-grid-container">
+                <div class="row flex"></div>
+            </div>
+        </div>
+    </div>
+    <!--<div class="row">
+        <div class="col s12 m12 l12 xl12">
+            <img id="pointer-down" src="../img/pointer_down.gif" alt="pointer down">
+        </div>
+    </div>-->
+    <!--<div>
+        <div id="offer-details" class="modal">
+            <div class="modal-content">
+
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Ok</a>
+            </div>
+        </div>
+    </div>-->
+</div>
 <script>
     app.handler(function (param) {
 
@@ -27,6 +204,60 @@
                     alert("error");
                 });
             }
+
+            var populateArticlesGrid = function () {
+
+                //Добавляем на место таблицы полосу бесконечного прогресса -
+                //пока будет ожидаться ответ сервера
+                preloaderShow();
+                
+                $.ajax({
+                    url: 'api/articles/get-filtered',
+                    type: "GET",
+                    data: null,
+                    cache: false
+                }).done(function (resp) {
+
+
+                    if (resp.error != "") {
+
+                        alert("error: " + resp.error);
+                    } else {
+
+                        var template = Hogan.compile(
+                            '{{#data}}'
+                            + '<div class="col s12 m12 l6 xl4">'
+                                + '<div class="card hoverable">'
+                                    + '<div class="card-image">'
+                                    + '<img src="{{image_base64}}">'
+                                    + '<div class="card-title">'
+                                    + '<div>{{title}}</div>'
+                                    + '<div>({{category}})</div>'
+                                + '</div>'
+                                + '<div class="card-content">'
+                                    + '<p>{{description}}</p>'
+                                    + '</div>'
+                                    //+ '<div class="card-action">'
+                                    //+ '<a data-offerid="{{id}}" class="modal-trigger" href="#offer-details">Details...</a>'
+                                    //+ '</div>'
+                                + '</div>'
+                            + '</div>'
+                            + '{{/data}}'
+                        );
+                        //Заполняем шаблон данными и помещаем на веб-страницу
+                        $('#article-grid-container > div').html(template.render(resp));
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+
+                    alert("Ошибка: " + jqXHR);
+                }).always(function () {
+
+                    preloaderHide();
+                });
+            }
+
+            populateArticlesGrid();
+
             setTimeout(preloaderHide, 500);
         };
     });

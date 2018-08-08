@@ -4,6 +4,7 @@ using AspNetMvcECommerce.Domain;
 using AspNetMvcECommerce.Domain.EntityController;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -120,8 +121,29 @@ namespace AspMvcECommerce.WebUi.Controllers
             }
         }
 
+        [Route("api/articles/get-filtered")]
+        public Object Get(Object _filterModel)
+        {
+            if (HttpContext.Current.Session["username"] != null)
+            {
+
+                /*User user =
+                    mRepository.UserEC.FindByLogin(HttpContext.Current.Session["username"].ToString());*/
+
+                return new ApiResponse() { data = mRepository.ArticleEC.Articles.ToList(), error = "" };
+            }
+            else
+            {
+                var response = Request.CreateResponse(HttpStatusCode.Moved);
+                response.Headers.Location =
+                    new Uri(Url.Content("~/wwwroot/pages/home.htm"));
+                return response;
+            }
+        }
+
         [Route("api/articles/add")]
-        public Object Get([FromUri] ArticleForm _articleForm)
+        //public Object Get([FromUri] ArticleForm _articleForm)
+        public Object Post(ArticleForm _articleForm)
         {
             try
             {
@@ -133,12 +155,13 @@ namespace AspMvcECommerce.WebUi.Controllers
                     {
                         Category category = mRepository.CategoryEC.Find(_articleForm.Categoryid);
                         Article article = new Article() {
-                            title = _articleForm.Title
+                            title = Uri.UnescapeDataString(_articleForm.Title)
                             , category_id = _articleForm.Categoryid
-                            , description = _articleForm.Description
+                            , description = Uri.UnescapeDataString(_articleForm.Description)
                             , price = _articleForm.Price
                             , quantity = _articleForm.Quantity
                             , Category = category
+                            , image_base64 = _articleForm.ImageBase64
                         };
                         mRepository.ArticleEC.Save(article);
                         return new ApiResponse() { data = new List<ArticleForm>() { _articleForm }, error = "" };
@@ -158,6 +181,25 @@ namespace AspMvcECommerce.WebUi.Controllers
                         new Uri(Url.Content("~/wwwroot/pages/home.htm"));
                     return response;
                 }
+            }
+            catch (DbEntityValidationException e)
+            {
+                string errorString = "";
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    errorString += String.Format("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    /*Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);*/
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        errorString += String.Format("- Property: \"{0}\", Error: \"{1}\"",
+                        ve.PropertyName, ve.ErrorMessage);
+                        /*Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);*/
+                    }
+                }
+                throw;
             }
             catch (Exception ex)
             {

@@ -116,6 +116,7 @@
     <Content Include="wwwroot\js\app.js" />
     <Content Include="wwwroot\js\custom.js" />
     <Content Include="wwwroot\js\hogan-3.0.2.min.js" />
+    <Content Include="wwwroot\js\ImageTools.js" />
     <Content Include="wwwroot\js\jquery-3.3.1.min.js" />
     <Content Include="wwwroot\js\jquery-hashchange.js" />
     <Content Include="wwwroot\js\materialize.min.js" />

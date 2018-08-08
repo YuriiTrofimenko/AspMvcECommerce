@@ -35,3 +35,10 @@ section.active {
 .selectedTableRow {
     color: #26a69a;
 }
+
+/* Public */
+
+.flex {
+    display: flex;
+    flex-wrap: wrap;
+}
