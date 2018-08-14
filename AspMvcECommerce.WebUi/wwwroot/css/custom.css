@@ -42,3 +42,11 @@ section.active {
     display: flex;
     flex-wrap: wrap;
 }
+
+.card:nth-child(3n) .card-content:after {
+    content: "<div class='divider'></div>" !important;
+}
+
+/*.card:after {
+    content: "<div class='divider'></div>";
+}*/

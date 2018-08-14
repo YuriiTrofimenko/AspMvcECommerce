@@ -244,7 +244,7 @@
                     $('#deleteCategory').click(function (ev) {
 
                         ev.preventDefault();
-                        var catId = $('.selectedTableRow').find('th').text();
+                        var catId = $('#categories-edit .selectedTableRow').find('th').text();
                         console.log(catId);
                         $.ajax({
                             url: "api/categories/delete"
@@ -437,6 +437,31 @@
                             });
                         }
                     );
+
+                    $("#deleteArticle").unbind("click");
+                    $('#deleteArticle').click(function (ev) {
+
+                        ev.preventDefault();
+                        var artId = $('#articles-edit .selectedTableRow').find('th').text();
+                        console.log(artId);
+                        $.ajax({
+                            url: "api/articles/delete"
+                            , data: { 'artid': artId }
+                            , type: 'GET'
+                        }).done(function (resp) {
+
+                            if (resp.error != "") {
+
+                                alert("error: " + resp.error);
+                            } else {
+
+                                populateArticlesTable();
+                            }
+                        }).fail(function () {
+
+                            alert("error");
+                        });
+                    });
 
                     break;
                 }

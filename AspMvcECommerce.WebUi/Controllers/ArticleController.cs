@@ -130,14 +130,25 @@ namespace AspMvcECommerce.WebUi.Controllers
                 /*User user =
                     mRepository.UserEC.FindByLogin(HttpContext.Current.Session["username"].ToString());*/
 
-                return new ApiResponse() { data = mRepository.ArticleEC.Articles.ToList(), error = "" };
+                return new ApiResponse() {
+                    data = mRepository.ArticleEC.Articles.Select(
+                            (a => {
+                                if (a.image_base64 == null || a.image_base64 == "")
+                                {
+                                    a.image_base64 = "/wwwroot/images/no-image.png";
+                                }
+                                return a;
+                            })
+                        ).ToList()
+                    , error = "" };
             }
             else
             {
-                var response = Request.CreateResponse(HttpStatusCode.Moved);
+                /*var response = Request.CreateResponse(HttpStatusCode.Moved);
                 response.Headers.Location =
-                    new Uri(Url.Content("~/wwwroot/pages/home.htm"));
-                return response;
+                    new Uri(Url.Content("/#signin"));
+                return response;*/
+                return null;
             }
         }
 
@@ -208,8 +219,74 @@ namespace AspMvcECommerce.WebUi.Controllers
             }
         }
 
-        /*[Route("api/categories/delete")]
-        public Object Get(int catid)
+        [Route("api/articles/addtocart")]
+        public Object Get(string artid)
+        {
+            try
+            {
+                int artidInt = Int32.Parse(artid);
+                if (HttpContext.Current.Session["username"] != null)
+                {
+                    if (HttpContext.Current.Session["cart"] == null)
+                    {
+                        HttpContext.Current.Session["cart"] = new Cart() { CartItems = new List<CartItem>() };
+                    }
+
+                    Cart cart = (Cart)HttpContext.Current.Session["cart"];
+                    CartItem currentCartItem =
+                        cart.CartItems.Find(cartItem => cartItem.ArticleId == artidInt);
+                    if (currentCartItem == null)
+                    {
+                        cart.CartItems.Add(new CartItem() { ArticleId = artidInt, Count = 0 });
+                        currentCartItem =
+                            cart.CartItems.Find(cartItem => cartItem.ArticleId == artidInt);
+                    }
+
+                    currentCartItem.Count++;
+
+                    HttpContext.Current.Session["cart"] = cart;
+
+                    return new ApiResponse() {
+                        data = new List<Cart>() { HttpContext.Current.Session["cart"] as Cart }
+                        , error = ""
+                    };
+                }
+                else
+                {
+                    var response = Request.CreateResponse(HttpStatusCode.Moved);
+                    response.Headers.Location =
+                        new Uri(Url.Content("~/wwwroot/pages/home.htm"));
+                    return response;
+                }
+            }
+            catch (DbEntityValidationException e)
+            {
+                string errorString = "";
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    errorString += String.Format("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    /*Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);*/
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        errorString += String.Format("- Property: \"{0}\", Error: \"{1}\"",
+                        ve.PropertyName, ve.ErrorMessage);
+                        /*Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);*/
+                    }
+                }
+                throw;
+            }
+            catch (Exception ex)
+            {
+
+                return new ApiResponse() { data = null, error = ex.Message + " : " + ex.StackTrace };
+            }
+        }
+
+        [Route("api/articles/delete")]
+        public Object Get(int artid)
         {
             try
             {
@@ -219,9 +296,9 @@ namespace AspMvcECommerce.WebUi.Controllers
                         mRepository.UserEC.FindByLogin(HttpContext.Current.Session["username"].ToString());
                     if (user.Role.name == "admin")
                     {
-                        Category category = mRepository.CategoryEC.Find(catid);
-                        mRepository.CategoryEC.Remove(category);
-                        return new ApiResponse() { data = new List<Category>() { category }, error = "" };
+                        Article article = mRepository.ArticleEC.Find(artid);
+                        mRepository.ArticleEC.Remove(article);
+                        return new ApiResponse() { data = new List<Article>() { article }, error = "" };
                     }
                     else
                     {
@@ -244,29 +321,29 @@ namespace AspMvcECommerce.WebUi.Controllers
 
                 return new ApiResponse() { data = null, error = ex.Message + " : " + ex.StackTrace };
             }
-        }*/
 
-        /*public ApiResponse Get([FromUri] string action)
-        {
-            switch (action)
+            /*public ApiResponse Get([FromUri] string action)
             {
-                case HttpRequestParams.signout:
-                    {
-                        try
+                switch (action)
+                {
+                    case HttpRequestParams.signout:
                         {
-                            HttpContext.Current.Session["username"] = null;
-                            return new ApiResponse() { data = new List<string>() { "logout" }, error = "" };
-                        }
-                        catch (Exception ex)
-                        {
+                            try
+                            {
+                                HttpContext.Current.Session["username"] = null;
+                                return new ApiResponse() { data = new List<string>() { "logout" }, error = "" };
+                            }
+                            catch (Exception ex)
+                            {
 
-                            return new ApiResponse() { data = null, error = ex.Message };
+                                return new ApiResponse() { data = null, error = ex.Message };
+                            }
                         }
-                    }
-                default:
-                    return new ApiResponse() { data = null, error = "params_error" };
-            }
-        }*/
+                    default:
+                        return new ApiResponse() { data = null, error = "params_error" };
+                }
+            }*/
+        }
 
         // POST api/<controller>
         public void Post([FromBody]string value)

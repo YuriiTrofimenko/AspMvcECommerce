@@ -113,6 +113,7 @@
     <Content Include="Web.config" />
     <Content Include="wwwroot\css\custom.css" />
     <Content Include="wwwroot\css\materialize.min.css" />
+    <Content Include="wwwroot\images\no-image.png" />
     <Content Include="wwwroot\js\app.js" />
     <Content Include="wwwroot\js\custom.js" />
     <Content Include="wwwroot\js\hogan-3.0.2.min.js" />
@@ -137,6 +138,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\ApiResponse.cs" />
+    <Compile Include="Models\Cart.cs" />
+    <Compile Include="Models\CartItem.cs" />
     <Compile Include="Models\NavigationData.cs" />
     <Compile Include="Models\ArticleForm.cs" />
     <Compile Include="Models\SignupForm.cs" />

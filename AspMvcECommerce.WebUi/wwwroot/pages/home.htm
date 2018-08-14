@@ -1,5 +1,5 @@
 ﻿<div id="articles-grid">
-    <div class="row flex">
+    <div class="row">
         <div class="col s1 valign-wrapper">
             <ul id="slide-out" class="sidenav">
                 <li>
@@ -150,14 +150,8 @@
                     </form>
                 </div>
             </div>-->
-        </div>
-    </div>
-    <!-- Сюда при помощи jquery помещается шаблон grid, заполненный данными offers -->
-    <div class="row">
-        <div class="col s12 m12 l12 xl12">
-            <div id="article-grid-container">
-                <div class="row flex"></div>
-            </div>
+            <!-- Сюда при помощи jquery помещается шаблон grid, заполненный данными offers -->
+            <div id="article-grid-container" class="row"></div>
         </div>
     </div>
     <!--<div class="row">
@@ -218,8 +212,10 @@
                     cache: false
                 }).done(function (resp) {
 
+                    if (resp === null) {
 
-                    if (resp.error != "") {
+                        window.location = "/#signin";
+                    } else if (resp.error != "") {
 
                         alert("error: " + resp.error);
                     } else {
@@ -229,23 +225,47 @@
                             + '<div class="col s12 m12 l6 xl4">'
                                 + '<div class="card hoverable">'
                                     + '<div class="card-image">'
-                                    + '<img src="{{image_base64}}">'
-                                    + '<div class="card-title">'
-                                    + '<div>{{title}}</div>'
-                                    + '<div>({{category}})</div>'
-                                + '</div>'
-                                + '<div class="card-content">'
-                                    + '<p>{{description}}</p>'
+                                        + '<img src="{{image_base64}}">'
+                                        + '<a id="{{id}}" class="btn-floating halfway-fab waves-effect waves-light red tooltipped" data-position="top" data-tooltip="Add one item to cart"><i class="material-icons">add</i></a>'
                                     + '</div>'
-                                    //+ '<div class="card-action">'
-                                    //+ '<a data-offerid="{{id}}" class="modal-trigger" href="#offer-details">Details...</a>'
-                                    //+ '</div>'
+                                    + '<div class="card-content">'
+                                        + '<span class="card-title">'
+                                        + '<div>{{title}}</div>'
+                                        + '<div>({{Category.name}})</div>'
+                                        + '</span>'
+                                        + '<p>{{description}}</p>'
+                                    + '</div>'
                                 + '</div>'
                             + '</div>'
                             + '{{/data}}'
                         );
                         //Заполняем шаблон данными и помещаем на веб-страницу
-                        $('#article-grid-container > div').html(template.render(resp));
+                        $('#article-grid-container').html(template.render(resp));
+                        $('.tooltipped').tooltip();
+                        $(".btn-floating").unbind("click");
+                        $('.btn-floating').click(function (ev) {
+
+                            ev.preventDefault();
+                            var artId = $(this).attr('id');
+                            console.log(artId);
+                            $.ajax({
+                                url: "api/articles/addtocart"
+                                , data: { 'artid': artId }
+                                , type: 'GET'
+                            }).done(function (resp) {
+
+                                if (resp.error != "") {
+
+                                    alert("error: " + resp.error);
+                                } else {
+
+                                    alert("One item added to the cart");
+                                }
+                            }).fail(function () {
+
+                                alert("error");
+                            });
+                        });
                     }
                 }).fail(function (jqXHR, textStatus, errorThrown) {
 
