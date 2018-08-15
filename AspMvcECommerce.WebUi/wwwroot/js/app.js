@@ -56,7 +56,7 @@
 
         
         var hash = location.hash || "#home";
-        console.log(hash);
+        //console.log(hash);
         var re = /#([-0-9A-Za-z]+)(\:(.+))?/;
         var match = re.exec(hash);
         hash = match[1];

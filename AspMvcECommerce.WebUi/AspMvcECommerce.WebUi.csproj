@@ -139,6 +139,7 @@
     </Compile>
     <Compile Include="Models\ApiResponse.cs" />
     <Compile Include="Models\Cart.cs" />
+    <Compile Include="Models\CartItemDetails.cs" />
     <Compile Include="Models\CartItem.cs" />
     <Compile Include="Models\NavigationData.cs" />
     <Compile Include="Models\ArticleForm.cs" />

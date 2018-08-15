@@ -285,6 +285,52 @@ namespace AspMvcECommerce.WebUi.Controllers
             }
         }
 
+        [Route("api/articles/cart")]
+        public Object Get(bool b)
+        {
+            try
+            {
+                if (HttpContext.Current.Session["username"] != null)
+                {
+                    if (HttpContext.Current.Session["cart"] == null)
+                    {
+                        HttpContext.Current.Session["cart"] = new Cart() { CartItems = new List<CartItem>() };
+                    }
+
+                    List<CartItemDetails> cartItemDetails =
+                        (HttpContext.Current.Session["cart"] as Cart).CartItems
+                        .Select(cartItem => {
+                            Article article = mRepository.ArticleEC.Find(cartItem.ArticleId);
+
+                            return new CartItemDetails() {
+                                ArticleId = cartItem.ArticleId
+                                , ArticleName = article.title
+                                , Count = cartItem.Count
+                            };
+                        })
+                        .ToList();
+
+                    return new ApiResponse()
+                    {
+                        data = cartItemDetails
+                        , error = ""
+                    };
+                }
+                else
+                {
+                    var response = Request.CreateResponse(HttpStatusCode.Moved);
+                    response.Headers.Location =
+                        new Uri(Url.Content("~/wwwroot/pages/home.htm"));
+                    return response;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return new ApiResponse() { data = null, error = ex.Message + " : " + ex.StackTrace };
+            }
+        }
+
         [Route("api/articles/delete")]
         public Object Get(int artid)
         {

@@ -173,7 +173,7 @@
 <script>
     app.handler(function (param) {
 
-        //console.log(preloaderHide);
+        var $cartHref = $('#cart');
         return function (param) {
 
             //console.log(param);
@@ -247,7 +247,7 @@
 
                             ev.preventDefault();
                             var artId = $(this).attr('id');
-                            console.log(artId);
+                            //console.log(artId);
                             $.ajax({
                                 url: "api/articles/addtocart"
                                 , data: { 'artid': artId }
@@ -277,6 +277,51 @@
             }
 
             populateArticlesGrid();
+
+            $cartHref.unbind('click');
+            $cartHref.click(function () {
+
+                $.ajax({
+                    url: "api/articles/cart?b=true"
+                    , type: 'GET'
+                }).done(function (resp) {
+
+                    if (resp.error != "") {
+
+                        alert("error: " + resp.error);
+                    } else {
+
+                        var template = Hogan.compile(
+                            '<table class="table">'
+                                + '<thead>'
+                                    + '<tr>'
+                                    + '<th>id</th>'
+                                    + '<th>name</th>'
+                                    + '<th>count</th>'
+                                    + '</tr>'
+                                + '</thead>'
+                                + '<tbody>'
+                                    + '{{#data}}'
+                                        + '<tr>'
+                                            + '<th scope="row">{{ArticleId}}</th>'
+                                            + '<td>{{ArticleName}}</td>'
+                                            + '<td>{{Count}}</td>'
+                                        + '</tr>'
+                                    + '{{/data}}'
+                                    + '{{^data}}'
+                                        + '<span>Cart is empty</span>'
+                                    + '{{/data}}'
+                                + '</tbody>'
+                            + '</table>'
+                        );
+                        //Заполняем шаблон данными и помещаем на веб-страницу
+                        $('#modal .modal-content').html(template.render(resp));
+                    }
+                }).fail(function () {
+
+                    alert("error");
+                });
+            });
 
             setTimeout(preloaderHide, 500);
         };

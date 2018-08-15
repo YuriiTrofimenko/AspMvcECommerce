@@ -58,7 +58,7 @@
     </div>
     <div class="container">
         @*<div>Role: @ViewBag.Role</div>
-            <div>User: @ViewBag.User</div>*@
+        <div>User: @ViewBag.User</div>*@
 
         <nav>
             <div class="nav-wrapper">
@@ -69,6 +69,7 @@
                     <li><a href="#signup">Signup</a></li>
                     <li><a href="#home:out">Signout</a></li>
                     <li><a href="#signin">Signin</a></li>
+                    <li><a id="cart" href="#modal" class="modal-trigger"><i class="material-icons">shopping_cart</i></a></li>
                 </ul>
             </div>
         </nav>
@@ -78,6 +79,7 @@
             <li><a href="#signup">Signup</a></li>
             <li><a href="#home:out">Signout</a></li>
             <li><a href="#signin">Signin</a></li>
+            <li><a id="cart" href="#modal" class="modal-trigger"><i class="material-icons">shopping_cart</i></a></li>
         </ul>
 
         <section id="home" class="active" src='@Url.Content("/api/auth/page?pagename=home&param=no")'></section>
@@ -85,6 +87,15 @@
         <section id="signin" src='@Url.Content("/api/auth/page?pagename=signin&param=no")'></section>
         <section id="admin" src='@Url.Content("/api/auth/page?pagename=admin&param=no")'></section>
         <section id="adminunit" src='@Url.Content("/api/auth/page?pagename=adminunit&param=no")'></section>
+        <!-- Скрытое всплывающее окно -->
+        <div id="modal" class="modal">
+            <div class="modal-content">
+                <!-- Место для динамического добавления контента на клиенте -->
+            </div>
+            <div class="modal-footer">
+                <a href="#home" class="modal-close waves-effect waves-green btn-flat">Ok</a>
+            </div>
+        </div>
     </div>
     <script src="~/wwwroot/js/jquery-3.3.1.min.js"></script>
     <script src="~/wwwroot/js/jquery-hashchange.js"></script>
