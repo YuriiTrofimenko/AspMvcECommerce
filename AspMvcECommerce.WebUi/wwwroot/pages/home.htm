@@ -171,6 +171,8 @@
     </div>-->
 </div>
 <script>
+    $('.sidenav').sidenav();
+    $('.collapsible').collapsible();
     app.handler(function (param) {
 
         var $cartHref = $('#cart');
@@ -199,7 +201,7 @@
                 });
             }
 
-            var populateArticlesGrid = function () {
+            var populateArticlesGrid = function (_filterData) {
 
                 //Добавляем на место таблицы полосу бесконечного прогресса -
                 //пока будет ожидаться ответ сервера
@@ -207,8 +209,8 @@
                 
                 $.ajax({
                     url: 'api/articles/get-filtered',
-                    type: "GET",
-                    data: null,
+                    type: "POST",
+                    data: _filterData,
                     cache: false
                 }).done(function (resp) {
 
@@ -230,8 +232,8 @@
                                     + '</div>'
                                     + '<div class="card-content">'
                                         + '<span class="card-title">'
-                                        + '<div>{{title}}</div>'
-                                        + '<div>({{Category.name}})</div>'
+                                        + '<div>{{title}} ({{Category.name}})</div>'
+                                        + '<div>${{price}}</div>'
                                         + '</span>'
                                         + '<p>{{description}}</p>'
                                     + '</div>'
@@ -248,9 +250,26 @@
                             ev.preventDefault();
                             var artId = $(this).attr('id');
                             //console.log(artId);
-                            $.ajax({
+                            /*$.ajax({
                                 url: "api/articles/addtocart"
                                 , data: { 'artid': artId }
+                                , type: 'GET'
+                            }).done(function (resp) {
+
+                                if (resp.error != "") {
+
+                                    alert("error: " + resp.error);
+                                } else {
+
+                                    alert("One item added to the cart");
+                                }
+                            }).fail(function () {
+
+                                alert("error");
+                            });*/
+                            $.ajax({
+                                url: "api/articles/fromcart"
+                                , data: { 'artid': artId, 'type': "add" }
                                 , type: 'GET'
                             }).done(function (resp) {
 
@@ -278,8 +297,91 @@
 
             populateArticlesGrid();
 
-            $cartHref.unbind('click');
-            $cartHref.click(function () {
+            var populateCategoriesFilter = function () {
+
+                //Добавляем полосу бесконечного прогресса -
+                //пока будет ожидаться ответ сервера
+                preloaderShow();
+
+                $.ajax({
+                    url: '/api/categories/get-all',
+                    type: "GET",
+                    cache: false
+                }).done(function (resp) {
+
+                    if (resp.error != "") {
+
+                        alert("error: " + resp.error);
+                    } else {
+
+                        var template = Hogan.compile(
+                            '{{#data}}'
+                            + '<p>'
+                            + '<label for="{{id}}">'
+                            + '<input id="{{id}}" type="checkbox" /><span>{{name}}</span>'
+                            + '</label>'
+                            + '</p>'
+                            + '{{/data}}'
+                        );
+                        //Заполняем шаблон данными и помещаем на веб-страницу
+                        $('#articles-grid #categories').html(template.render(resp));
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+
+                    alert("Ошибка: " + jqXHR);
+                }).always(function () {
+
+                    preloaderHide();
+                });
+            }
+
+            populateCategoriesFilter();
+
+            var doFilter = function () {
+                /*var filterData =
+                    { 'order-by': $('form#order-rules input[type=radio]:checked').attr('id') };*/
+                var filterData = {};
+
+                /*var countryName = $('form#filters input#country-input').val();
+                var cityName = $('form#filters input#city-input').val();
+                var collaboratorsCount = $('form#filters input#c-count-input').val();
+
+                if (countryName != "") {
+                    filterData['country'] = countryName;
+                }
+                if (cityName != "") {
+                    filterData['city'] = cityName;
+                }
+                if ($('form#filters input#c-count-on-off').is(':checked')) {
+                    if (collaboratorsCount != "") {
+                        filterData['c-count'] = collaboratorsCount;
+                    } else {
+                        filterData['c-count'] = -1;
+                    }
+                }*/
+
+                //{ categories : [ 1, 3 ]}
+
+                var categoriesArray = new Array();
+                $("#articles-grid #categories input:checked").each(function () {
+                    categoriesArray.push($(this).attr('id'));
+                });
+                if (categoriesArray.length > 0) {
+                    filterData["categories"] = categoriesArray;
+                }
+
+                populateArticlesGrid(filterData);
+            }
+            $(document).unbind('change');
+            $(document).on(
+                'change'
+                , '#articles-grid #categories input[type=checkbox]'
+                , function () {
+
+                    doFilter();
+                });
+
+            var showCart = function () {
 
                 $.ajax({
                     url: "api/articles/cart?b=true"
@@ -293,35 +395,130 @@
 
                         var template = Hogan.compile(
                             '<table class="table">'
-                                + '<thead>'
-                                    + '<tr>'
-                                    + '<th>id</th>'
-                                    + '<th>name</th>'
-                                    + '<th>count</th>'
-                                    + '</tr>'
-                                + '</thead>'
-                                + '<tbody>'
-                                    + '{{#data}}'
-                                        + '<tr>'
-                                            + '<th scope="row">{{ArticleId}}</th>'
-                                            + '<td>{{ArticleName}}</td>'
-                                            + '<td>{{Count}}</td>'
-                                        + '</tr>'
-                                    + '{{/data}}'
-                                    + '{{^data}}'
-                                        + '<span>Cart is empty</span>'
-                                    + '{{/data}}'
-                                + '</tbody>'
+                            + '<thead>'
+                            + '<tr>'
+                            + '<th>id</th>'
+                            + '<th>name</th>'
+                            + '<th>count</th>'
+                            + '</tr>'
+                            + '</thead>'
+                            + '<tbody>'
+                            + '{{#data}}'
+                            + '<tr>'
+                            + '<th scope="row">{{ArticleId}}</th>'
+                            + '<td>{{ArticleName}}</td>'
+                            + '<td>{{Count}}</td>'
+                            + '<td>'
+                            + '<div class="row">'
+                            + '<a class="col s3 offset-s1 waves-effect waves-light btn negBtn"><i class="material-icons">exposure_neg_1</i></a>'
+                            + '<a class="col s3 offset-s1 waves-effect waves-light btn plusBtn"><i class="material-icons">exposure_plus_1</i></a>'
+                            + '<a class="col s3 offset-s1 waves-effect waves-light btn remBtn"><i class="material-icons">clear</i></a>'
+                            + '</div>'
+                            + '</td>'
+                            + '</tr>'
+                            + '{{/data}}'
+                            + '{{^data}}'
+                            + '<span>Cart is empty</span>'
+                            + '{{/data}}'
+                            + '</tbody>'
                             + '</table>'
                         );
                         //Заполняем шаблон данными и помещаем на веб-страницу
                         $('#modal .modal-content').html(template.render(resp));
+
+                        $(".plusBtn").unbind("click");
+                        $('.plusBtn').click(function (ev) {
+
+                            ev.preventDefault();
+                            var artId = $(this).parent().parent().parent().children('th').text();
+                            console.log(artId);
+                            $.ajax({
+                                url: "api/articles/fromcart"
+                                , data: { 'artid': artId, 'type': "add" }
+                                , type: 'GET'
+                            }).done(function (resp) {
+
+                                if (resp.error != "") {
+
+                                    alert("error: " + resp.error);
+                                } else {
+                                    console.log("One item added to the cart");
+                                    //$cartHref.click();
+                                    showCart();
+                                }
+                            }).fail(function () {
+
+                                alert("error");
+                            });
+                        });
+
+                        $(".negBtn").unbind("click");
+                        $('.negBtn').click(function (ev) {
+
+                            ev.preventDefault();
+                            //var artId = $(this).attr('id');
+                            var artId = $(this).parent().parent().parent().children('th').text();
+                            //console.log(artId);
+                            $.ajax({
+                                url: "api/articles/fromcart"
+                                , data: { 'artid': artId, 'type': 'neg' }
+                                , type: 'GET'
+                            }).done(function (resp) {
+
+                                if (resp.error != "") {
+
+                                    alert("error: " + resp.error);
+                                } else {
+                                    console.log("One item remove from cart");
+                                    //$cartHref.click();
+                                    showCart();
+                                }
+                            }).fail(function () {
+
+                                alert("error");
+                            });
+                        });
+
+                        $(".remBtn").unbind("click");
+                        $('.remBtn').click(function (ev) {
+
+                            if (confirm("remove all items?")) {
+
+                                ev.preventDefault();
+                                //var artId = $(this).attr('id');
+                                var artId = $(this).parent().parent().parent().children('th').text();
+                                //console.log(artId);
+                                $.ajax({
+                                    url: "api/articles/fromcart"
+                                    , data: { 'artid': artId, 'type': 'rem' }
+                                    , type: 'GET'
+                                }).done(function (resp) {
+
+                                    if (resp.error != "") {
+
+                                        alert("error: " + resp.error);
+                                    } else {
+                                        console.log("All items remove from cart");
+                                        //$cartHref.click();
+                                        showCart();
+                                    }
+                                }).fail(function () {
+
+                                    alert("error");
+                                });
+                            } else {
+                                alert("ok!");
+                            }
+                        });
                     }
                 }).fail(function () {
 
                     alert("error");
                 });
-            });
+            };
+
+            $cartHref.unbind('click');
+            $cartHref.click(showCart);
 
             setTimeout(preloaderHide, 500);
         };

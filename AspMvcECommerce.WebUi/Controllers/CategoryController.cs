@@ -97,19 +97,19 @@ namespace AspMvcECommerce.WebUi.Controllers
         {
             if(HttpContext.Current.Session["username"] != null) {
 
-                User user =
-                    mRepository.UserEC.FindByLogin(HttpContext.Current.Session["username"].ToString());
-                if (user.Role.name == "admin")
-                {
+                //User user =
+                    //mRepository.UserEC.FindByLogin(HttpContext.Current.Session["username"].ToString());
+                //if (user.Role.name == "admin")
+                //{
                     return new ApiResponse() { data = mRepository.CategoryEC.Categories.ToList(), error = "" };
-                }
-                else
-                {
-                    var response = Request.CreateResponse(HttpStatusCode.Moved);
-                    response.Headers.Location =
-                        new Uri(Url.Content("~/wwwroot/pages/home.htm"));
-                    return response;
-                }
+                //}
+                //else
+                //{
+                //    var response = Request.CreateResponse(HttpStatusCode.Moved);
+                //    response.Headers.Location =
+                //        new Uri(Url.Content("~/wwwroot/pages/home.htm"));
+                //    return response;
+                //}
             }
             else
             {

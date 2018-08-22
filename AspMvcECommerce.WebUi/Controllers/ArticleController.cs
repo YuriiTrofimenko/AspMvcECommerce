@@ -122,16 +122,44 @@ namespace AspMvcECommerce.WebUi.Controllers
         }
 
         [Route("api/articles/get-filtered")]
-        public Object Get(Object _filterModel)
+        public Object Post(FilterForm _filterModel)
         {
             if (HttpContext.Current.Session["username"] != null)
             {
 
-                /*User user =
-                    mRepository.UserEC.FindByLogin(HttpContext.Current.Session["username"].ToString());*/
+                bool filterByCategory =
+                    (_filterModel != null && _filterModel.categories != null)
+                    ? true
+                    : false;
+
+                int[] categoryIds = null;
+                if (filterByCategory)
+                {
+                    categoryIds = _filterModel.categories;
+                }
 
                 return new ApiResponse() {
-                    data = mRepository.ArticleEC.Articles.Select(
+                    data = mRepository.ArticleEC.Articles
+                        .Where(a => {
+                            if (filterByCategory)
+                            {
+                                bool selected = false;
+                                foreach (int categoryId in categoryIds)
+                                {
+                                    if (a.category_id == categoryId)
+                                    {
+                                        selected = true;
+                                        break;
+                                    }
+                                }
+                                return selected;
+                            }
+                            else
+                            {
+                                return true;
+                            }
+                        })
+                        .Select(
                             (a => {
                                 if (a.image_base64 == null || a.image_base64 == "")
                                 {
@@ -368,27 +396,90 @@ namespace AspMvcECommerce.WebUi.Controllers
                 return new ApiResponse() { data = null, error = ex.Message + " : " + ex.StackTrace };
             }
 
-            /*public ApiResponse Get([FromUri] string action)
-            {
-                switch (action)
-                {
-                    case HttpRequestParams.signout:
-                        {
-                            try
-                            {
-                                HttpContext.Current.Session["username"] = null;
-                                return new ApiResponse() { data = new List<string>() { "logout" }, error = "" };
-                            }
-                            catch (Exception ex)
-                            {
+            
+        }
 
-                                return new ApiResponse() { data = null, error = ex.Message };
-                            }
+        [Route("api/articles/fromcart")]
+        public Object Get(string artid, string type)
+        {
+            try
+            {
+                int artidInt = Int32.Parse(artid);
+                if (HttpContext.Current.Session["username"] != null)
+                {
+                    if (HttpContext.Current.Session["cart"] == null)
+                    {
+                        HttpContext.Current.Session["cart"] = new Cart() { CartItems = new List<CartItem>() };
+                    }
+
+                    Cart cart = (Cart)HttpContext.Current.Session["cart"];
+                    CartItem currentCartItem =
+                        cart.CartItems.Find(cartItem => cartItem.ArticleId == artidInt);
+                    if (currentCartItem == null)
+                    {
+                        cart.CartItems.Add(new CartItem() { ArticleId = artidInt, Count = 0 });
+                        currentCartItem =
+                            cart.CartItems.Find(cartItem => cartItem.ArticleId == artidInt);
+                    }
+                    if (type == "neg")
+                    {
+                        currentCartItem.Count--;
+                        if (currentCartItem.Count <= 0)
+                        {
+                            cart.CartItems.Remove(currentCartItem);
                         }
-                    default:
-                        return new ApiResponse() { data = null, error = "params_error" };
+                    }
+                    else if (type == "rem")
+                    {
+                        cart.CartItems.Remove(currentCartItem);
+                    }
+                    else if (type == "add")
+                    {
+                        currentCartItem.Count++;
+                    }
+
+
+                    HttpContext.Current.Session["cart"] = cart;
+
+                    return new ApiResponse()
+                    {
+                        data = new List<Cart>() { HttpContext.Current.Session["cart"] as Cart }
+                        ,
+                        error = ""
+                    };
                 }
-            }*/
+                else
+                {
+                    var response = Request.CreateResponse(HttpStatusCode.Moved);
+                    response.Headers.Location =
+                        new Uri(Url.Content("~/wwwroot/pages/home.htm"));
+                    return response;
+                }
+            }
+            catch (DbEntityValidationException e)
+            {
+                string errorString = "";
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    errorString += String.Format("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    /*Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);*/
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        errorString += String.Format("- Property: \"{0}\", Error: \"{1}\"",
+                        ve.PropertyName, ve.ErrorMessage);
+                        /*Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);*/
+                    }
+                }
+                throw;
+            }
+            catch (Exception ex)
+            {
+
+                return new ApiResponse() { data = null, error = ex.Message + " : " + ex.StackTrace };
+            }
         }
 
         // POST api/<controller>
