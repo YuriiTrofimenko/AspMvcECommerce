@@ -35,9 +35,12 @@
             //$.get(src, "html") // it has src and is empty - load it
             $.get(src) // it has src and is empty - load it
                 .done(function (html) {
-                    currentPage = pageName;
-                    $page.html(html);
-                    show(pageName, param);
+
+                    if (html) {
+                        currentPage = pageName;
+                        $page.html(html);
+                        show(pageName, param);
+                    }
                 })
                 .fail(function () { $page.html("failed to get:" + src); });
         } else

@@ -69,54 +69,66 @@
                             </div>
                             <div class="collapsible-body">
                                 <form id="order-rules" action="#">
+                                    <p>
+                                        <label>
+                                            <input id="sortPriceDesc" name="sort-group" type="radio" checked="checked" />
+                                            <span>expensive first</span>
+                                        </label>
+                                    </p>
+                                    <p>
+                                        <label>
+                                            <input id="sortPriceAsc" name="sort-group" type="radio" />
+                                            <span>cheap first</span>
+                                        </label>
+                                    </p>
                                     <!--<p>
-                                        <label>
-                                            <input id="sort-created-desc" name="sort-group" type="radio" checked="checked" />
-                                            <span>сначала новые по дате создания</span>
-                                        </label>
-                                    </p>
-                                    <p>
-                                        <label>
-                                            <input id="sort-created-asc" name="sort-group" type="radio" />
-                                            <span>сначала старые по дате создания</span>
-                                        </label>
-                                    </p>
-                                    <p>
-                                        <label>
-                                            <input id="sort-urgency-asc" name="sort-group" type="radio" /> <span>
-                                                от
-                                                краткосрочных к длительным
-                                            </span>
-                                        </label>
-                                    </p>
-                                    <p>
-                                        <label>
-                                            <input id="sort-urgency-desc" name="sort-group" type="radio" /> <span>
-                                                от
-                                                длительных к краткосрочным
-                                            </span>
-                                        </label>
-                                    </p>
-                                    <p>
-                                        <label>
-                                            <input id="sort-start-asc" name="sort-group" type="radio" /> <span>сначала ближайшие по дате старта</span>
-                                        </label>
-                                    </p>
-                                    <p>
-                                        <label>
-                                            <input id="sort-start-desc" name="sort-group" type="radio" /> <span>сначала позднейшие по дате старта</span>
-                                        </label>
-                                    </p>
-                                    <p>
-                                        <label>
-                                            <input id="sort-finish-asc" name="sort-group" type="radio" /> <span>сначала ближайшие по дате окончания</span>
-                                        </label>
-                                    </p>
-                                    <p>
-                                        <label>
-                                            <input id="sort-finish-desc" name="sort-group" type="radio" /> <span>сначала позднейшие по дате окончания</span>
-                                        </label>
-                                    </p>-->
+        <label>
+            <input id="sort-created-desc" name="sort-group" type="radio" checked="checked" />
+            <span>сначала новые по дате создания</span>
+        </label>
+    </p>
+    <p>
+        <label>
+            <input id="sort-created-asc" name="sort-group" type="radio" />
+            <span>сначала старые по дате создания</span>
+        </label>
+    </p>
+    <p>
+        <label>
+            <input id="sort-urgency-asc" name="sort-group" type="radio" /> <span>
+                от
+                краткосрочных к длительным
+            </span>
+        </label>
+    </p>
+    <p>
+        <label>
+            <input id="sort-urgency-desc" name="sort-group" type="radio" /> <span>
+                от
+                длительных к краткосрочным
+            </span>
+        </label>
+    </p>
+    <p>
+        <label>
+            <input id="sort-start-asc" name="sort-group" type="radio" /> <span>сначала ближайшие по дате старта</span>
+        </label>
+    </p>
+    <p>
+        <label>
+            <input id="sort-start-desc" name="sort-group" type="radio" /> <span>сначала позднейшие по дате старта</span>
+        </label>
+    </p>
+    <p>
+        <label>
+            <input id="sort-finish-asc" name="sort-group" type="radio" /> <span>сначала ближайшие по дате окончания</span>
+        </label>
+    </p>
+    <p>
+        <label>
+            <input id="sort-finish-desc" name="sort-group" type="radio" /> <span>сначала позднейшие по дате окончания</span>
+        </label>
+    </p>-->
                                 </form>
                             </div>
                         </li>
@@ -206,6 +218,11 @@
                 //Добавляем на место таблицы полосу бесконечного прогресса -
                 //пока будет ожидаться ответ сервера
                 preloaderShow();
+
+                if (_filterData === undefined) {
+                    _filterData =
+                        { 'sort': $('form#order-rules input[type=radio]:checked').attr('id') };
+                }
                 
                 $.ajax({
                     url: 'api/articles/get-filtered',
@@ -217,7 +234,7 @@
                     if (resp === null) {
 
                         window.location = "/#signin";
-                    } else if (resp.error != "") {
+                    } else if (resp != null && resp.error != "") {
 
                         alert("error: " + resp.error);
                     } else {
@@ -309,22 +326,25 @@
                     cache: false
                 }).done(function (resp) {
 
-                    if (resp.error != "") {
+                    if (resp != undefined) {
+                        if (resp.error != "") {
+                            if (resp.error != undefined) {
+                                alert("error: " + resp.error);
+                            }
+                        } else {
 
-                        alert("error: " + resp.error);
-                    } else {
-
-                        var template = Hogan.compile(
-                            '{{#data}}'
-                            + '<p>'
-                            + '<label for="{{id}}">'
-                            + '<input id="{{id}}" type="checkbox" /><span>{{name}}</span>'
-                            + '</label>'
-                            + '</p>'
-                            + '{{/data}}'
-                        );
-                        //Заполняем шаблон данными и помещаем на веб-страницу
-                        $('#articles-grid #categories').html(template.render(resp));
+                            var template = Hogan.compile(
+                                '{{#data}}'
+                                + '<p>'
+                                + '<label for="{{id}}">'
+                                + '<input id="{{id}}" type="checkbox" /><span>{{name}}</span>'
+                                + '</label>'
+                                + '</p>'
+                                + '{{/data}}'
+                            );
+                            //Заполняем шаблон данными и помещаем на веб-страницу
+                            $('#articles-grid #categories').html(template.render(resp));
+                        }
                     }
                 }).fail(function (jqXHR, textStatus, errorThrown) {
 
@@ -363,19 +383,35 @@
                 //{ categories : [ 1, 3 ]}
 
                 var categoriesArray = new Array();
+                //Перебираем все чекбоксы категорий и добавляем их в массив
                 $("#articles-grid #categories input:checked").each(function () {
                     categoriesArray.push($(this).attr('id'));
                 });
+                //Если массив выбранных категорий не пуст -
+                //добавляем параметр категорий в объект запроса
                 if (categoriesArray.length > 0) {
                     filterData["categories"] = categoriesArray;
                 }
+                //В любом случае одна из радио-кнопок сортировки выбрана,
+                //добавляем параметр сортировки в объект запроса
+                filterData["sort"] =
+                    $('form#order-rules input[type=radio]:checked').attr('id');
 
                 populateArticlesGrid(filterData);
             }
+
             $(document).unbind('change');
             $(document).on(
                 'change'
                 , '#articles-grid #categories input[type=checkbox]'
+                , function () {
+
+                    doFilter();
+                });
+
+            $(document).on(
+                'change'
+                , 'form#order-rules input[type=radio]:checked'
                 , function () {
 
                     doFilter();

@@ -7,6 +7,12 @@ namespace AspMvcECommerce.WebUi.Models
 {
     public class FilterForm
     {
+        public enum OrderBy {
+            sortPriceDesc
+            , sortPriceAsc
+        }
+
         public int[] categories { get; set; }
+        public OrderBy sort { get; set; }
     }
 }

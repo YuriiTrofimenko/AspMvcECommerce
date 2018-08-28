@@ -133,33 +133,45 @@ namespace AspMvcECommerce.WebUi.Controllers
                     : false;
 
                 int[] categoryIds = null;
-                if (filterByCategory)
-                {
-                    categoryIds = _filterModel.categories;
-                }
 
-                return new ApiResponse() {
-                    data = mRepository.ArticleEC.Articles
-                        .Where(a => {
-                            if (filterByCategory)
-                            {
-                                bool selected = false;
-                                foreach (int categoryId in categoryIds)
-                                {
-                                    if (a.category_id == categoryId)
-                                    {
-                                        selected = true;
-                                        break;
-                                    }
-                                }
-                                return selected;
-                            }
-                            else
-                            {
-                                return true;
-                            }
-                        })
-                        .Select(
+                var query = mRepository.ArticleEC.Articles;
+
+                if (_filterModel != null)
+                {
+
+                    if (filterByCategory)
+                    {
+                        categoryIds = _filterModel.categories;
+                        query =
+                           query.Where(a =>
+                           {
+                               bool selected = false;
+                               foreach (int categoryId in categoryIds)
+                               {
+                                   if (a.category_id == categoryId)
+                                   {
+                                       selected = true;
+                                       break;
+                                   }
+                               }
+                               return selected;
+                           });
+                    }
+
+                    switch (_filterModel.sort)
+                    {
+                        case FilterForm.OrderBy.sortPriceDesc:
+                            query = query.OrderByDescending((a => a.price));
+                            break;
+                        case FilterForm.OrderBy.sortPriceAsc:
+                            query = query.OrderBy((a => a.price));
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                query =
+                    query.Select(
                             (a => {
                                 if (a.image_base64 == null || a.image_base64 == "")
                                 {
@@ -167,7 +179,10 @@ namespace AspMvcECommerce.WebUi.Controllers
                                 }
                                 return a;
                             })
-                        ).ToList()
+                        );
+
+                return new ApiResponse() {
+                    data = query.ToList()
                     , error = "" };
             }
             else
